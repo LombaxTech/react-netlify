@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 
+if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+    console.log("dev mode");
+} else {
+    console.log("production mode");
+}
+
 const App = () => {
     const [posts, setPosts] = useState([]);
 
