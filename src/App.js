@@ -56,7 +56,7 @@ const App = () => {
                     Accept: "application/json",
                 },
                 body: JSON.stringify({
-                    name: "Joel Miller",
+                    name,
                     message: postInput,
                 }),
             });
