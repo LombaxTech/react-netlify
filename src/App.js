@@ -7,11 +7,16 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
     console.log("production mode");
 }
 
+const API_URL =
+    !process.env.NODE_ENV || process.env.NODE_ENV === "development"
+        ? "http://localhost:8000"
+        : "https://backend-for-netlify.herokuapp.com";
+
 const App = () => {
     const [posts, setPosts] = useState([]);
 
     async function initPosts() {
-        let posts = await fetch("http://localhost:8000/posts");
+        let posts = await fetch(`${API_URL}/posts`);
         posts = await posts.json();
         console.log({ posts });
         setPosts(posts);
@@ -29,7 +34,7 @@ const App = () => {
 
     const addPost = async () => {
         try {
-            let result = await fetch("http://localhost:8000/post", {
+            let result = await fetch(`${API_URL}/post`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
