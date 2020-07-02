@@ -12,6 +12,9 @@ const API_URL =
         ? "http://localhost:8000"
         : "https://backend-for-netlify.herokuapp.com";
 
+const io = require("socket.io-client");
+const socket = io(API_URL);
+
 const App = () => {
     const [posts, setPosts] = useState([]);
 
@@ -26,13 +29,25 @@ const App = () => {
         initPosts();
     }, []);
 
+    // * socket stuff
+    socket.on("connect", () => console.log("socket connected from client"));
+    socket.on("message", (message) =>
+        setPosts([...posts, { name: message.name, message: message.message }])
+    );
+
     const [postInput, setPostInput] = useState("");
+    const [name, setName] = useState("");
 
     const handlePostChange = (e) => {
         setPostInput(e.target.value);
     };
 
-    const addPost = async () => {
+    const handleNameChange = (e) => {
+        setName(e.target.value);
+    };
+
+    const addPost = async (e) => {
+        e.preventDefault();
         try {
             let result = await fetch(`${API_URL}/post`, {
                 method: "POST",
@@ -46,7 +61,12 @@ const App = () => {
                 }),
             });
             result = await result.json();
-            console.log(result);
+            socket.emit("message", {
+                name,
+                message: postInput,
+            });
+            setPostInput("");
+            // console.log(result);
         } catch (error) {
             console.log({ error });
         }
@@ -57,15 +77,24 @@ const App = () => {
             <h1>First Netlify Try!</h1>
             <h2>Posts</h2>
             <ul style={{ listStyleType: "none" }}>
-                {posts.map((post) => (
-                    <li key={post._id}>
+                {posts.map((post, i) => (
+                    <li key={i}>
                         {post.name}: {post.message}
                     </li>
                 ))}
             </ul>
 
-            <input type="text" value={postInput} onChange={handlePostChange} />
-            <button onClick={addPost}>Add Post</button>
+            <form onSubmit={addPost}>
+                <label>Message: </label>
+                <input
+                    type="text"
+                    value={postInput}
+                    onChange={handlePostChange}
+                />
+                <label>Name: </label>
+                <input type="text" value={name} onChange={handleNameChange} />
+                <button type="submit">Add Post</button>
+            </form>
         </div>
     );
 };
