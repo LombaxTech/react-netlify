@@ -54,7 +54,7 @@ const App = () => {
 
     return (
         <div>
-            <h1>First Netlify Try</h1>
+            <h1>First Netlify Try!</h1>
             <h2>Posts</h2>
             <ul style={{ listStyleType: "none" }}>
                 {posts.map((post) => (
