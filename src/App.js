@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.scss";
 
-if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-    console.log("dev mode");
-} else {
-    console.log("production mode");
-}
+import { Button } from "react-bootstrap";
 
 const API_URL =
     !process.env.NODE_ENV || process.env.NODE_ENV === "development"
@@ -92,10 +89,18 @@ const App = () => {
                 />
                 <label>Name: </label>
                 <input type="text" value={name} onChange={handleNameChange} />
-                <button type="submit">Add Post</button>
+                <Button type="submit" variant="primary" className="submitBtn">
+                    Add Post
+                </Button>
             </form>
         </div>
     );
 };
 
 export default App;
+
+// if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+//     console.log("dev mode");
+// } else {
+//     console.log("production mode");
+// }
